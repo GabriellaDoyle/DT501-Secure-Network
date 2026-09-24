@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net">
+  <diagram name="Security Overlay - ISO 27001 Mapped" id="security_1">
+    <mxGraphModel dx="1422" dy="900" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1400" pageHeight="1000" math="0" shadow="0">
+      <root>
+        <mxCell id="0"/>
+        <mxCell id="1" parent="0"/>
+
+        <!-- Title -->
+        <mxCell id="title" value="Security Architecture Overlay - ISO/IEC 27001 Control Mapping" style="text;html=1;fontSize=16;fontStyle=1;align=center;verticalAlign=middle;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="300" y="15" width="800" height="30" as="geometry"/>
+        </mxCell>
+
+        <!-- Layer 7 - Application -->
+        <mxCell id="layer7" value="" style="rounded=1;arcSize=5;fillColor=#E1F4FF;strokeColor=#0070F2;strokeWidth=2;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="80" y="60" width="1240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="l7_label" value="Layer 7 - Application Security" style="text;html=1;fontSize=13;fontStyle=1;fontColor=#0070F2;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="100" y="68" width="250" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="l7_alb" value="Application Load Balancer&#xa;- HTTPS (TLS 1.2+) termination&#xa;- SSL certificate via ACM&#xa;- HTTP to HTTPS redirect&#xa;&#xa;ISO 27001: A.10.1.1 (Cryptographic controls)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="100" y="95" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="l7_waf" value="Security Headers &amp; Health Checks&#xa;- X-Frame-Options, CSP headers&#xa;- ALB health check /health (HTTP 200)&#xa;- Stickiness disabled (stateless)&#xa;&#xa;ISO 27001: A.14.1.2 (Secure app services)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="400" y="95" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="l7_iam" value="IAM Roles &amp; Policies&#xa;- EC2 uses LabInstanceProfile&#xa;- Pre-configured managed role&#xa;- No inline policies; managed only&#xa;&#xa;ISO 27001: A.9.2.3 (Privilege management)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="700" y="95" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="l7_cw" value="CloudWatch Monitoring&#xa;- CPU utilisation alarms (&gt;70%)&#xa;- Scaling policy triggers&#xa;- Dashboard for real-time metrics&#xa;&#xa;ISO 27001: A.12.4.1 (Event logging)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="95" width="280" height="85" as="geometry"/>
+        </mxCell>
+
+        <!-- Layer 4 - Transport -->
+        <mxCell id="layer4" value="" style="rounded=1;arcSize=5;fillColor=#E1F4FF;strokeColor=#0070F2;strokeWidth=2;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="80" y="210" width="1240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="l4_label" value="Layer 3/4 - Network &amp; Transport Security" style="text;html=1;fontSize=13;fontStyle=1;fontColor=#0070F2;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="100" y="218" width="350" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="l4_sg_alb" value="Security Group: alb-sg&#xa;- Inbound: TCP 443 from 0.0.0.0/0&#xa;- Inbound: TCP 80 from 0.0.0.0/0 (redirect)&#xa;- Outbound: TCP 80 to app-sg only&#xa;&#xa;ISO 27001: A.13.1.1 (Network controls)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="100" y="245" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="l4_sg_app" value="Security Group: app-sg&#xa;- Inbound: TCP 80 from alb-sg ONLY&#xa;- Inbound: TCP 22 from bastion-sg ONLY&#xa;- Outbound: TCP 443 to 0.0.0.0/0 (updates)&#xa;&#xa;ISO 27001: A.13.1.3 (Segregation in networks)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="400" y="245" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="l4_nacl" value="Network ACLs&#xa;- Public subnet: Allow 80, 443 inbound&#xa;- Private subnet: Deny all direct internet&#xa;- Ephemeral port range for responses&#xa;&#xa;ISO 27001: A.13.1.1 (Network controls)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="700" y="245" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="l4_flowlogs" value="VPC Flow Logs&#xa;- All traffic logged (ACCEPT + REJECT)&#xa;- Sent to S3 bucket&#xa;- Queryable via Athena&#xa;&#xa;ISO 27001: A.12.4.1 (Event logging)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="245" width="280" height="85" as="geometry"/>
+        </mxCell>
+
+        <!-- Layer - Data -->
+        <mxCell id="layer_data" value="" style="rounded=1;arcSize=5;fillColor=#E1F4FF;strokeColor=#0070F2;strokeWidth=2;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="80" y="360" width="1240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="ld_label" value="Data Protection &amp; Encryption" style="text;html=1;fontSize=13;fontStyle=1;fontColor=#0070F2;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="100" y="368" width="300" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="ld_transit" value="Data in Transit&#xa;- TLS 1.2+ enforced on ALB&#xa;- HTTPS between client and ALB&#xa;- Internal traffic within VPC (private)&#xa;&#xa;ISO 27001: A.10.1.1 (Cryptographic controls)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="100" y="395" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="ld_rest" value="Data at Rest&#xa;- EBS volumes: AES-256 encryption&#xa;- AWS-managed KMS keys&#xa;- Enabled via launch template&#xa;&#xa;ISO 27001: A.10.1.1 (Cryptographic controls)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="400" y="395" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="ld_ami" value="AMI Hardening&#xa;- Custom AMI from golden image&#xa;- Unnecessary services removed&#xa;- Security patches pre-applied&#xa;&#xa;ISO 27001: A.12.6.1 (Technical vuln mgmt)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="700" y="395" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="ld_tags" value="Resource Tagging &amp; Asset Management&#xa;- All resources tagged: Environment,&#xa;  Owner, CostCentre, Project&#xa;- Enables audit trail and cost tracking&#xa;&#xa;ISO 27001: A.8.1.1 (Inventory of assets)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="395" width="280" height="85" as="geometry"/>
+        </mxCell>
+
+        <!-- Availability / Resilience -->
+        <mxCell id="layer_avail" value="" style="rounded=1;arcSize=5;fillColor=#E1F4FF;strokeColor=#0070F2;strokeWidth=2;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="80" y="510" width="1240" height="130" as="geometry"/>
+        </mxCell>
+        <mxCell id="la_label" value="Availability, Resilience &amp; Scalability" style="text;html=1;fontSize=13;fontStyle=1;fontColor=#0070F2;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="100" y="518" width="350" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="la_multiaz" value="Multi-AZ Deployment&#xa;- Resources across us-east-1a + 1b&#xa;- ALB distributes across both AZs&#xa;- Eliminates single point of failure&#xa;&#xa;ISO 27001: A.17.1.1 (Business continuity)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="100" y="545" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="la_asg" value="Auto Scaling&#xa;- Min: 2, Max: 4, Desired: 2&#xa;- Scale-out at CPU &gt; 70%&#xa;- Scale-in at CPU &lt; 30%&#xa;&#xa;ISO 27001: A.17.2.1 (Availability of IT)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="400" y="545" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="la_nat" value="NAT Gateway (High Availability)&#xa;- Enables private subnet outbound&#xa;- OS patching without public exposure&#xa;- Managed service (no single instance)&#xa;&#xa;ISO 27001: A.13.1.1 (Network controls)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="700" y="545" width="280" height="85" as="geometry"/>
+        </mxCell>
+        <mxCell id="la_launch" value="Launch Template (Versioned)&#xa;- Immutable deployments via AMI&#xa;- Instance type: t3.micro&#xa;- User data script for bootstrap&#xa;&#xa;ISO 27001: A.14.2.2 (Change control)" style="rounded=1;fillColor=#FFFFFF;strokeColor=#0070F2;fontSize=9;align=left;spacingLeft=8;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="1000" y="545" width="280" height="85" as="geometry"/>
+        </mxCell>
+
+        <!-- Risk summary row -->
+        <mxCell id="risk_row" value="" style="rounded=1;arcSize=5;fillColor=#EAECEE;strokeColor=#999999;strokeWidth=1;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="80" y="660" width="1240" height="80" as="geometry"/>
+        </mxCell>
+        <mxCell id="risk_label" value="Key Risks &amp; Mitigations" style="text;html=1;fontSize=13;fontStyle=1;fontColor=#000000;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="100" y="665" width="250" height="20" as="geometry"/>
+        </mxCell>
+        <mxCell id="r1" value="R1: DDoS &#8594; ALB + Auto Scaling absorb&#xa;R2: Unauthorised access &#8594; SG chain + IAM least privilege" style="text;html=1;fontSize=9;fontColor=#000000;align=left;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="100" y="690" width="350" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="r2" value="R3: Data breach &#8594; TLS + EBS encryption + private subnets&#xa;R4: Config drift &#8594; Launch template versioning + IaC" style="text;html=1;fontSize=9;fontColor=#000000;align=left;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="480" y="690" width="350" height="40" as="geometry"/>
+        </mxCell>
+        <mxCell id="r3" value="R5: Service outage &#8594; Multi-AZ + health checks + auto-replace&#xa;R6: Insufficient logging &#8594; VPC Flow Logs + CloudWatch alarms" style="text;html=1;fontSize=9;fontColor=#000000;align=left;fontFamily=72 Brand;" vertex="1" parent="1">
+          <mxGeometry x="860" y="690" width="380" height="40" as="geometry"/>
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
